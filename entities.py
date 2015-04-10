@@ -307,13 +307,13 @@ class OreBlob:
 
       if horiz == 0 or (worldmodel.is_occupied(world, new_pt) and
          not isinstance(worldmodel.get_tile_occupant(world, new_pt),
-         entities.Ore)):
-         vert = sign(dest_pt.y - self.positin.y)
+         Ore)):
+         vert = sign(dest_pt.y - self.position.y)
          new_pt = point.Point(self.position.x, self.position.y + vert)
 
          if vert == 0 or (worldmodel.is_occupied(world, new_pt) and
             not isinstance(worldmodel.get_tile_occupant(world, new_pt),
-            entities.Ore)):
+            Ore)):
             new_pt = point.Point(self.position.x, self.position.y)
 
       return new_pt
