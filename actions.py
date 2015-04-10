@@ -37,20 +37,6 @@ def adjacent(pt1, pt2):
       (pt1.y == pt2.y and abs(pt1.x - pt2.x) == 1))
 
 
-def next_position(world, entity_pt, dest_pt):
-   horiz = sign(dest_pt.x - entity_pt.x)
-   new_pt = point.Point(entity_pt.x + horiz, entity_pt.y)
-
-   if horiz == 0 or worldmodel.is_occupied(world, new_pt):
-      vert = sign(dest_pt.y - entity_pt.y)
-      new_pt = point.Point(entity_pt.x, entity_pt.y + vert)
-
-      if vert == 0 or worldmodel.is_occupied(world, new_pt):
-         new_pt = point.Point(entity_pt.x, entity_pt.y)
-
-   return new_pt
-
-
 def blob_next_position(world, entity_pt, dest_pt):
    horiz = sign(dest_pt.x - entity_pt.x)
    new_pt = point.Point(entity_pt.x + horiz, entity_pt.y)
@@ -80,7 +66,7 @@ def miner_to_ore(world, entity, ore):
       remove_entity(world, ore)
       return ([ore_pt], True)
    else:
-      new_pt = next_position(world, entity_pt, ore_pt)
+      new_pt = next_position(world, ore_pt)
       return (worldmodel.move_entity(world, entity, new_pt), False)
 
 
@@ -96,7 +82,7 @@ def miner_to_smith(world, entity, smith):
       entities.set_resource_count(entity, 0)
       return ([], True)
    else:
-      new_pt = next_position(world, entity_pt, smith_pt)
+      new_pt = next_position(world, smith_pt)
       return (worldmodel.move_entity(world, entity, new_pt), False)
 
 

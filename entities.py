@@ -19,6 +19,18 @@ class MinerNotFull:
       self.resource_count = 0
       self.animation_rate = animation_rate
       self.pending_actions = []
+   def next_position(self, world, dest_pt):
+      horiz = sign(dest_pt.x - self.position.x)
+      new_pt = point.Point(self.position.x + horiz, entity_pt.y)
+
+      if horiz == 0 or worldmodel.is_occupied(world, new_pt):
+         vert = sign(dest_pt.y - self.position.y)
+         new_pt = point.Point(entity_pt.x, self.position.y + vert)
+
+         if vert == 0 or worldmodel.is_occupied(world, new_pt):
+            new_pt = point.Point(entity_pt.x, self.position.y)
+
+      return new_pt
 
 class MinerFull:
    def __init__(self, name, resource_limit, position, rate, imgs,
@@ -32,6 +44,18 @@ class MinerFull:
       self.resource_count = resource_limit
       self.animation_rate = animation_rate
       self.pending_actions = []
+   def next_position(self, world, dest_pt):
+      horiz = sign(dest_pt.x - self.position.x)
+      new_pt = point.Point(self.position.x + horiz, entity_pt.y)
+
+      if horiz == 0 or worldmodel.is_occupied(world, new_pt):
+         vert = sign(dest_pt.y - self.position.y)
+         new_pt = point.Point(entity_pt.x, self.position.y + vert)
+
+         if vert == 0 or worldmodel.is_occupied(world, new_pt):
+            new_pt = point.Point(entity_pt.x, self.position.y)
+
+      return new_pt
 
 class Vein:
    def __init__(self, name, rate, position, imgs, resource_distance=1):
@@ -42,6 +66,18 @@ class Vein:
       self.current_img = 0
       self.resource_distance = resource_distance
       self.pending_actions = []
+   def next_position(self, world, dest_pt):
+      horiz = sign(dest_pt.x - self.position.x)
+      new_pt = point.Point(self.position.x + horiz, entity_pt.y)
+
+      if horiz == 0 or worldmodel.is_occupied(world, new_pt):
+         vert = sign(dest_pt.y - self.position.y)
+         new_pt = point.Point(entity_pt.x, self.position.y + vert)
+
+         if vert == 0 or worldmodel.is_occupied(world, new_pt):
+            new_pt = point.Point(entity_pt.x, self.position.y)
+
+      return new_pt
 
 class Ore:
    def __init__(self, name, position, imgs, rate=5000):
@@ -51,6 +87,18 @@ class Ore:
       self.current_img = 0
       self.rate = rate
       self.pending_actions = []
+   def next_position(self, world, dest_pt):
+      horiz = sign(dest_pt.x - self.position.x)
+      new_pt = point.Point(self.position.x + horiz, entity_pt.y)
+
+      if horiz == 0 or worldmodel.is_occupied(world, new_pt):
+         vert = sign(dest_pt.y - self.position.y)
+         new_pt = point.Point(entity_pt.x, self.position.y + vert)
+
+         if vert == 0 or worldmodel.is_occupied(world, new_pt):
+            new_pt = point.Point(entity_pt.x, self.position.y)
+
+      return new_pt
 
 class Blacksmith:
    def __init__(self, name, position, imgs, resource_limit, rate,
@@ -64,6 +112,18 @@ class Blacksmith:
       self.rate = rate
       self.resource_distance = resource_distance
       self.pending_actions = []
+   def next_position(self, world, dest_pt):
+      horiz = sign(dest_pt.x - self.position.x)
+      new_pt = point.Point(self.position.x + horiz, entity_pt.y)
+
+      if horiz == 0 or worldmodel.is_occupied(world, new_pt):
+         vert = sign(dest_pt.y - self.position.y)
+         new_pt = point.Point(entity_pt.x, self.position.y + vert)
+
+         if vert == 0 or worldmodel.is_occupied(world, new_pt):
+            new_pt = point.Point(entity_pt.x, self.position.y)
+
+      return new_pt
 
 class Obstacle:
    def __init__(self, name, position, imgs):
