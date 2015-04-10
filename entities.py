@@ -1,11 +1,15 @@
 import point
+import worldmodel
 
 class Background:
    def __init__(self, name, imgs):
       self.name = name
       self.imgs = imgs
       self.current_img = 0
-
+   def get_images(self):
+      return self.imgs
+   def get_name(self):
+      return self.name
 
 class MinerNotFull:
    def __init__(self, name, resource_limit, position, rate, imgs,
@@ -21,16 +25,34 @@ class MinerNotFull:
       self.pending_actions = []
    def next_position(self, world, dest_pt):
       horiz = sign(dest_pt.x - self.position.x)
-      new_pt = point.Point(self.position.x + horiz, entity_pt.y)
+      new_pt = point.Point(self.position.x + horiz, self.position.y)
 
       if horiz == 0 or worldmodel.is_occupied(world, new_pt):
          vert = sign(dest_pt.y - self.position.y)
-         new_pt = point.Point(entity_pt.x, self.position.y + vert)
+         new_pt = point.Point(self.position.x, self.position.y + vert)
 
          if vert == 0 or worldmodel.is_occupied(world, new_pt):
-            new_pt = point.Point(entity_pt.x, self.position.y)
+            new_pt = point.Point(self.position.x, self.position.y)
 
       return new_pt
+   def set_position(self, point):
+      self.position = point
+   def get_position(self):
+      return self.position
+   def get_images(self):
+      return self.imgs
+   def get_rate(self):
+      return self.rate
+   def set_resource_count(self, n):
+      self.resource_count = n
+   def get_resource_count(self):
+      return self.resource_count
+   def get_resource_limit(self):
+      return self.resource_limit
+   def get_name(self):
+      return self.name
+   def get_animation_rate(self):
+      return self.animation_rate
 
 class MinerFull:
    def __init__(self, name, resource_limit, position, rate, imgs,
@@ -46,16 +68,34 @@ class MinerFull:
       self.pending_actions = []
    def next_position(self, world, dest_pt):
       horiz = sign(dest_pt.x - self.position.x)
-      new_pt = point.Point(self.position.x + horiz, entity_pt.y)
+      new_pt = point.Point(self.position.x + horiz, self.position.y)
 
       if horiz == 0 or worldmodel.is_occupied(world, new_pt):
          vert = sign(dest_pt.y - self.position.y)
-         new_pt = point.Point(entity_pt.x, self.position.y + vert)
+         new_pt = point.Point(self.position.x, self.position.y + vert)
 
          if vert == 0 or worldmodel.is_occupied(world, new_pt):
-            new_pt = point.Point(entity_pt.x, self.position.y)
+            new_pt = point.Point(self.position.x, self.position.y)
 
       return new_pt
+   def set_position(self, point):
+      self.position = point
+   def get_position(self):
+      return self.position
+   def get_images(self):
+      return self.imgs
+   def get_rate(self):
+      return self.rate
+   def set_resource_count(self, n):
+      self.resource_count = n
+   def get_resource_count(self):
+      return self.resource_count
+   def get_resource_limit(self):
+      return self.resource_limit
+   def get_name(self):
+      return self.name
+   def get_animation_rate(self):
+      return self.animation_rate
 
 class Vein:
    def __init__(self, name, rate, position, imgs, resource_distance=1):
@@ -68,16 +108,26 @@ class Vein:
       self.pending_actions = []
    def next_position(self, world, dest_pt):
       horiz = sign(dest_pt.x - self.position.x)
-      new_pt = point.Point(self.position.x + horiz, entity_pt.y)
+      new_pt = point.Point(self.position.x + horiz, self.position.y)
 
       if horiz == 0 or worldmodel.is_occupied(world, new_pt):
          vert = sign(dest_pt.y - self.position.y)
-         new_pt = point.Point(entity_pt.x, self.position.y + vert)
+         new_pt = point.Point(self.position.x, self.position.y + vert)
 
          if vert == 0 or worldmodel.is_occupied(world, new_pt):
-            new_pt = point.Point(entity_pt.x, self.position.y)
+            new_pt = point.Point(self.position.x, self.position.y)
 
       return new_pt
+   def set_position(self, point):
+      self.position = point
+   def get_position(self):
+      return self.position
+   def get_images(self):
+      return self.imgs
+   def get_rate(self):
+      return self.rate
+   def get_name(self):
+      return self.name
 
 class Ore:
    def __init__(self, name, position, imgs, rate=5000):
@@ -87,6 +137,16 @@ class Ore:
       self.current_img = 0
       self.rate = rate
       self.pending_actions = []
+   def set_position(self, point):
+      self.position = point
+   def get_position(self):
+      return self.position
+   def get_images(self):
+      return self.imgs
+   def get_rate(self):
+      return self.rate
+   def get_name(self):
+      return self.name
 
 class Blacksmith:
    def __init__(self, name, position, imgs, resource_limit, rate,
@@ -100,6 +160,22 @@ class Blacksmith:
       self.rate = rate
       self.resource_distance = resource_distance
       self.pending_actions = []
+   def set_position(self, point):
+      self.position = point
+   def get_position(self):
+      return self.position
+   def get_images(self):
+      return self.imgs
+   def get_rate(self):
+      return self.rate
+   def set_resource_count(self, n):
+      self.resource_count = n
+   def get_resource_count(self):
+      return self.resource_count
+   def get_resource_limit(self):
+      return self.resource_limit
+   def get_name(self):
+      return self.name
 
 class Obstacle:
    def __init__(self, name, position, imgs):
@@ -107,6 +183,14 @@ class Obstacle:
       self.position = position
       self.imgs = imgs
       self.current_img = 0
+   def set_position(self, point):
+      self.position = point
+   def get_position(self):
+      return self.position
+   def get_images(self):
+      return self.imgs
+   def get_name(self):
+      return self.name
 
 class OreBlob:
    def __init__(self, name, position, rate, imgs, animation_rate):
@@ -117,6 +201,34 @@ class OreBlob:
       self.current_img = 0
       self.animation_rate = animation_rate
       self.pending_actions = []
+   def next_position(self, world, dest_pt):
+      horiz = sign(dest_pt.x - self.position.x)
+      new_pt = point.Point(self.position.x + horiz, self.position.y)
+
+      if horiz == 0 or (worldmodel.is_occupied(world, new_pt) and
+         not isinstance(worldmodel.get_tile_occupant(world, new_pt),
+         entities.Ore)):
+         vert = sign(dest_pt.y - self.positin.y)
+         new_pt = point.Point(self.position.x, self.position.y + vert)
+
+         if vert == 0 or (worldmodel.is_occupied(world, new_pt) and
+            not isinstance(worldmodel.get_tile_occupant(world, new_pt),
+            entities.Ore)):
+            new_pt = point.Point(self.position.x, self.position.y)
+
+      return new_pt
+   def set_position(self, point):
+      self.position = point
+   def get_position(self):
+      return self.position
+   def get_images(self):
+      return self.imgs
+   def get_rate(self):
+      return self.rate
+   def get_name(self):
+      return self.name
+   def get_animation_rate(self):
+      return self.animation_rate
 
 class Quake:
    def __init__(self, name, position, imgs, animation_rate):
@@ -126,48 +238,31 @@ class Quake:
       self.current_img = 0
       self.animation_rate = animation_rate
       self.pending_actions = []
+   def set_position(self, point):
+      self.position = point
+   def get_position(self):
+      return self.position
+   def get_images(self):
+      return self.imgs
+   def get_name(   def get_animation_rate(self):
+      return self.animation_rate):
+      return self.name
+   def get_animation_rate(self):
+      return self.animation_rate
 
-
-def set_position(entity, point):
-   entity.position = point
-
-def get_position(entity):
-   return entity.position
-
-
-def get_images(entity):
-   return entity.imgs
+def sign(x):
+   if x < 0:
+      return -1
+   elif x > 0:
+      return 1
+   else:
+      return 0
 
 def get_image(entity):
    return entity.imgs[entity.current_img]
 
-
-def get_rate(entity):
-   return entity.rate
-
-
-def set_resource_count(entity, n):
-   entity.resource_count = n
-
-def get_resource_count(entity):
-   return entity.resource_count
-
-
-def get_resource_limit(entity):
-   return entity.resource_limit
-
-
 def get_resource_distance(entity):
    return entity.resource_distance
-
-
-def get_name(entity):
-   return entity.name
-
-
-def get_animation_rate(entity):
-   return entity.animation_rate
-
 
 def remove_pending_action(entity, action):
    if hasattr(entity, "pending_actions"):

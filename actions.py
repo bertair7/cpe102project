@@ -23,36 +23,9 @@ VEIN_RATE_MIN = 8000
 VEIN_RATE_MAX = 17000
 
 
-def sign(x):
-   if x < 0:
-      return -1
-   elif x > 0:
-      return 1
-   else:
-      return 0
-
-
 def adjacent(pt1, pt2):
    return ((pt1.x == pt2.x and abs(pt1.y - pt2.y) == 1) or
       (pt1.y == pt2.y and abs(pt1.x - pt2.x) == 1))
-
-
-def blob_next_position(world, entity_pt, dest_pt):
-   horiz = sign(dest_pt.x - entity_pt.x)
-   new_pt = point.Point(entity_pt.x + horiz, entity_pt.y)
-
-   if horiz == 0 or (worldmodel.is_occupied(world, new_pt) and
-      not isinstance(worldmodel.get_tile_occupant(world, new_pt),
-      entities.Ore)):
-      vert = sign(dest_pt.y - entity_pt.y)
-      new_pt = point.Point(entity_pt.x, entity_pt.y + vert)
-
-      if vert == 0 or (worldmodel.is_occupied(world, new_pt) and
-         not isinstance(worldmodel.get_tile_occupant(world, new_pt),
-         entities.Ore)):
-         new_pt = point.Point(entity_pt.x, entity_pt.y)
-
-   return new_pt
 
 
 def miner_to_ore(world, entity, ore):
@@ -66,7 +39,7 @@ def miner_to_ore(world, entity, ore):
       remove_entity(world, ore)
       return ([ore_pt], True)
    else:
-      new_pt = next_position(world, ore_pt)
+      new_pt = entity.next_position(world, ore_pt)
       return (worldmodel.move_entity(world, entity, new_pt), False)
 
 
@@ -82,7 +55,7 @@ def miner_to_smith(world, entity, smith):
       entities.set_resource_count(entity, 0)
       return ([], True)
    else:
-      new_pt = next_position(world, smith_pt)
+      new_pt = entity.next_position(world, smith_pt)
       return (worldmodel.move_entity(world, entity, new_pt), False)
 
 
