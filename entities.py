@@ -1,5 +1,6 @@
 import point
 import worldmodel
+import actions
 
 class Background:
    def __init__(self, name, imgs):
@@ -75,6 +76,18 @@ class MinerNotFull:
          self.pending_actions = []
    def next_image(self):
       self.current_img = (self.current_img + 1) % len(self.imgs)
+   def miner_to_ore(self, world, ore):
+      entity_pt = self.get_position()
+      if not ore:
+         return ([entity_pt], False)
+      ore_pt = ore.get_position()
+      if adjacent(entity_pt, ore_pt):
+         self.set_resource_count(1 + self.get_resource_count())
+         actions.remove_entity(world, ore)
+         return ([ore_pt], True)
+      else:
+         new_pt = self.next_position(world, ore_pt)
+         return (world.move_entity(self, new_pt), False)
 
 class MinerFull:
    def __init__(self, name, resource_limit, position, rate, imgs,
@@ -136,6 +149,19 @@ class MinerFull:
          self.pending_actions = []
    def next_image(self):
       self.current_img = (self.current_img + 1) % len(self.imgs)
+   def miner_to_smith(self, world, smith):
+      entity_pt = self.get_position()
+      if not smith:
+         return ([entity_pt], False)
+      smith_pt = smith.get_position()
+      if adjacent(entity_pt, smith_pt):
+         smith.set_resource_count(smith.get_resource_count() +
+            self.get_resource_count())
+         self.set_resource_count(0)
+         return ([], True)
+      else:
+         new_pt = self.next_position(world, smith_pt)
+         return (world.move_entity(self, new_pt), False)
 
 class Vein:
    def __init__(self, name, rate, position, imgs, resource_distance=1):
@@ -345,6 +371,20 @@ class OreBlob:
          self.pending_actions = []
    def next_image(self):
       self.current_img = (self.current_img + 1) % len(self.imgs)
+   def blob_to_vein(self, world, vein):
+      entity_pt = self.get_position()
+      if not vein:
+         return ([entity_pt], False)
+      vein_pt = vein.get_position()
+      if adjacent(entity_pt, vein_pt):
+         actions.remove_entity(world, vein)
+         return ([vein_pt], True)
+      else:
+         new_pt = self.next_position(world, vein_pt)
+         old_entity = world.get_tile_occupant(new_pt)
+         if isinstance(old_entity, Ore):
+            actions.remove_entity(world, old_entity)
+         return (world.move_entity(self, new_pt), False)
 
 class Quake:
    def __init__(self, name, position, imgs, animation_rate):
@@ -390,6 +430,10 @@ def sign(x):
       return 1
    else:
       return 0
+
+def adjacent(pt1, pt2):
+   return ((pt1.x == pt2.x and abs(pt1.y - pt2.y) == 1) or
+      (pt1.y == pt2.y and abs(pt1.x - pt2.x) == 1))
 
 def get_image(entity):
    return entity.imgs[entity.current_img]

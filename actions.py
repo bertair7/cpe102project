@@ -23,39 +23,6 @@ VEIN_RATE_MIN = 8000
 VEIN_RATE_MAX = 17000
 
 
-def adjacent(pt1, pt2):
-   return ((pt1.x == pt2.x and abs(pt1.y - pt2.y) == 1) or
-      (pt1.y == pt2.y and abs(pt1.x - pt2.x) == 1))
-
-
-def miner_to_ore(world, entity, ore):
-   entity_pt = entity.get_position()
-   if not ore:
-      return ([entity_pt], False)
-   ore_pt = ore.get_position()
-   if adjacent(entity_pt, ore_pt):
-      entity.set_resource_count(1 + entity.get_resource_count())
-      remove_entity(world, ore)
-      return ([ore_pt], True)
-   else:
-      new_pt = entity.next_position(world, ore_pt)
-      return (world.move_entity(entity, new_pt), False)
-
-
-def miner_to_smith(world, entity, smith):
-   entity_pt = entity.get_position()
-   if not smith:
-      return ([entity_pt], False)
-   smith_pt = smith.get_position()
-   if adjacent(entity_pt, smith_pt):
-      smith.set_resource_count(smith.get_resource_count() +
-         entity.get_resource_count())
-      entity.set_resource_count(0)
-      return ([], True)
-   else:
-      new_pt = entity.next_position(world, smith_pt)
-      return (world.move_entity(entity, new_pt), False)
-
 
 def create_miner_not_full_action(world, entity, i_store):
    def action(current_ticks):
@@ -63,7 +30,7 @@ def create_miner_not_full_action(world, entity, i_store):
 
       entity_pt = entity.get_position()
       ore = world.find_nearest(entity_pt, entities.Ore)
-      (tiles, found) = miner_to_ore(world, entity, ore)
+      (tiles, found) = entity.miner_to_ore(world, ore)
 
       new_entity = entity
       if found:
@@ -83,7 +50,7 @@ def create_miner_full_action(world, entity, i_store):
 
       entity_pt = entity.get_position()
       smith = world.find_nearest(entity_pt, entities.Blacksmith)
-      (tiles, found) = miner_to_smith(world, entity, smith)
+      (tiles, found) = entity.miner_to_smith(world, smith)
 
       new_entity = entity
       if found:
@@ -97,29 +64,13 @@ def create_miner_full_action(world, entity, i_store):
    return action
 
 
-def blob_to_vein(world, entity, vein):
-   entity_pt = entity.get_position()
-   if not vein:
-      return ([entity_pt], False)
-   vein_pt = vein.get_position()
-   if adjacent(entity_pt, vein_pt):
-      remove_entity(world, vein)
-      return ([vein_pt], True)
-   else:
-      new_pt = entity.next_position(world, vein_pt)
-      old_entity = world.get_tile_occupant(new_pt)
-      if isinstance(old_entity, entities.Ore):
-         remove_entity(world, old_entity)
-      return (world.move_entity(entity, new_pt), False)
-
-
 def create_ore_blob_action(world, entity, i_store):
    def action(current_ticks):
       entity.remove_pending_action(action)
 
       entity_pt = entity.get_position()
       vein = world.find_nearest(entity_pt, entities.Vein)
-      (tiles, found) = blob_to_vein(world, entity, vein)
+      (tiles, found) = entity.blob_to_vein(world, vein)
 
       next_time = current_ticks + entity.get_rate()
       if found:
