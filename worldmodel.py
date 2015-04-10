@@ -58,7 +58,7 @@ class WorldModel:
 
       return tiles
    def remove_entity(self, entity):
-      remove_entity_at(self, entity.get_position())
+      self.remove_entity_at(entity.get_position())
    def remove_entity_at(self, pt):
       if (self.within_bounds(pt) and
          self.occupancy.get_cell(pt) != None):
