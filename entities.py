@@ -87,18 +87,6 @@ class Ore:
       self.current_img = 0
       self.rate = rate
       self.pending_actions = []
-   def next_position(self, world, dest_pt):
-      horiz = sign(dest_pt.x - self.position.x)
-      new_pt = point.Point(self.position.x + horiz, entity_pt.y)
-
-      if horiz == 0 or worldmodel.is_occupied(world, new_pt):
-         vert = sign(dest_pt.y - self.position.y)
-         new_pt = point.Point(entity_pt.x, self.position.y + vert)
-
-         if vert == 0 or worldmodel.is_occupied(world, new_pt):
-            new_pt = point.Point(entity_pt.x, self.position.y)
-
-      return new_pt
 
 class Blacksmith:
    def __init__(self, name, position, imgs, resource_limit, rate,
@@ -112,18 +100,6 @@ class Blacksmith:
       self.rate = rate
       self.resource_distance = resource_distance
       self.pending_actions = []
-   def next_position(self, world, dest_pt):
-      horiz = sign(dest_pt.x - self.position.x)
-      new_pt = point.Point(self.position.x + horiz, entity_pt.y)
-
-      if horiz == 0 or worldmodel.is_occupied(world, new_pt):
-         vert = sign(dest_pt.y - self.position.y)
-         new_pt = point.Point(entity_pt.x, self.position.y + vert)
-
-         if vert == 0 or worldmodel.is_occupied(world, new_pt):
-            new_pt = point.Point(entity_pt.x, self.position.y)
-
-      return new_pt
 
 class Obstacle:
    def __init__(self, name, position, imgs):
