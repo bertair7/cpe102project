@@ -31,11 +31,11 @@ class MinerNotFull:
       horiz = sign(dest_pt.x - self.position.x)
       new_pt = point.Point(self.position.x + horiz, self.position.y)
 
-      if horiz == 0 or worldmodel.is_occupied(world, new_pt):
+      if horiz == 0 or world.is_occupied(new_pt):
          vert = sign(dest_pt.y - self.position.y)
          new_pt = point.Point(self.position.x, self.position.y + vert)
 
-         if vert == 0 or worldmodel.is_occupied(world, new_pt):
+         if vert == 0 or world.is_occupied(new_pt):
             new_pt = point.Point(self.position.x, self.position.y)
 
       return new_pt
@@ -92,11 +92,11 @@ class MinerFull:
       horiz = sign(dest_pt.x - self.position.x)
       new_pt = point.Point(self.position.x + horiz, self.position.y)
 
-      if horiz == 0 or worldmodel.is_occupied(world, new_pt):
+      if horiz == 0 or world.is_occupied(new_pt):
          vert = sign(dest_pt.y - self.position.y)
          new_pt = point.Point(self.position.x, self.position.y + vert)
 
-         if vert == 0 or worldmodel.is_occupied(world, new_pt):
+         if vert == 0 or world.is_occupied(new_pt):
             new_pt = point.Point(self.position.x, self.position.y)
 
       return new_pt
@@ -150,11 +150,11 @@ class Vein:
       horiz = sign(dest_pt.x - self.position.x)
       new_pt = point.Point(self.position.x + horiz, self.position.y)
 
-      if horiz == 0 or worldmodel.is_occupied(world, new_pt):
+      if horiz == 0 or world.is_occupied(new_pt):
          vert = sign(dest_pt.y - self.position.y)
          new_pt = point.Point(self.position.x, self.position.y + vert)
 
-         if vert == 0 or worldmodel.is_occupied(world, new_pt):
+         if vert == 0 or world.is_occupied(new_pt):
             new_pt = point.Point(self.position.x, self.position.y)
 
       return new_pt
@@ -305,15 +305,13 @@ class OreBlob:
       horiz = sign(dest_pt.x - self.position.x)
       new_pt = point.Point(self.position.x + horiz, self.position.y)
 
-      if horiz == 0 or (worldmodel.is_occupied(world, new_pt) and
-         not isinstance(worldmodel.get_tile_occupant(world, new_pt),
-         Ore)):
+      if horiz == 0 or (world.is_occupied(new_pt) and
+         not isinstance(world.get_tile_occupant(new_pt), Ore)):
          vert = sign(dest_pt.y - self.position.y)
          new_pt = point.Point(self.position.x, self.position.y + vert)
 
-         if vert == 0 or (worldmodel.is_occupied(world, new_pt) and
-            not isinstance(worldmodel.get_tile_occupant(world, new_pt),
-            Ore)):
+         if vert == 0 or (world.is_occupied(new_pt) and
+            not isinstance(world.get_tile_occupant(new_pt), Ore)):
             new_pt = point.Point(self.position.x, self.position.y)
 
       return new_pt
