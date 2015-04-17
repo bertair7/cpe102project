@@ -1,45 +1,51 @@
 # cpe102project
-actions.py (The resaon why I still have the majority of these functions still there is because 
-when I tried to create a general program for them, I didn't have enough time to make it work.
-In addition, some of the functions had global variables that I felt were not necessary to move 
-over to another file because it would only make the actions file useless, as there would only 
-be 3-4 functions inside it.  I kept the transfer miners functions here as I couldn't 
-determine a solid place to put them in entities, whether one went with the MinerNotFull or the 
-MinerFull class.)
+actions.py (The resaon why I still have the majority of these functions still
+there is because when I tried to create a general program for them, I didn't
+have enough time to make it work.In addition, some of the functions had global
+variables that I felt were not necessary to move over to another file because
+it would only make the actions file useless, as there would only be 3-4
+functions inside it.  I kept the transfer miners functions here as I couldn't
+determine a solid place to put them in entities, whether one went with the
+MinerNotFull or the MinerFull class.)
 create_miner_not_full_action(world, entity, i_store) - gives access to action
 --> action(current_ticks) - set of actions when miner does not have enough ore
+
 create_miner_full_action(world, entity, i_store) - gives access to action
 --> action(current_ticks) - set of actions when miner has enough ore
+
 create_ore_blob_action(world, entity, i_store) - gives access to action
 -->action(current_ticks) - set next action depending on # of ticks
-find_open_around(world, pt, distance) - returns new point within bounds and not occupied
+
+find_open_around(world, pt, distance) - returns new point within bounds and
+not occupied
+
 create_vein_action(world, entity, i_store) - gives access to action
 --> action(current_ticks) - creates ore at a certain time
+
 try_transform_miner_not_full(world, entity) - transforms miner to new miner with full inventory
-try_transform_miner(world, entity, transform) - transforms miner to specified transformation
-create_miner_action(world, entity, image_store) - determines action if full or not
+
+try_transform_miner(world, entity, transform) - transforms miner to specified
+transformation
+
+create_miner_action(world, entity, image_store) - determines action if full or
+not
+
 create_animation_action(world, entity, repeat_count) - gives access to action
 --> action(current_ticks) - animation for entity
+
 create_entity_death_action(world, entity) - gives access action
 --> action(current_ticks) - removes entity from world
+
 create_ore_transform_action(world, entity) - gives access action
 --> action(current_ticks) - transforms ore to blob 
+
 remove_entity(world, entity) - removes entity and unschedules events
-create_blob(world, name, pt, rate, ticks, i_store) - creates a new blob and schedules events
-schedule_blob(world, blob, ticks, i_store) - schedules action for blob
-schedule_miner(world, miner, ticks, i_store) - schedules action for miner
-schedule_ore(world, ore, ticks, i_store) - schedules action for ore
-schedule_vein(world, vein, ticks, i_store) - schedules action for vein
-schedule_quake(world, quake, ticks) - schedules action for quake
 schedule_action(world, entity, action, time) - schedules action 
-create_ore(world, name, pt, ticks, i_store) - creates new ore
-create_quake(world, name, pt, ticks, i_store) - creates new quake
-create_vein(world, name, pt, ticks, i_store) - creates new vein
 clear_pending_action(world, entity) - unschedule an event
 
-builder_controller.py (I kept the same functionality in this file mainly due to the fact that
-4 different files are called in some of the functions, in which a change in these functions
-to a method in a class seemed like a waste of time.)
+builder_controller.py (I kept the same functionality in this file mainly due
+to the fact that 4 different files are called in some of the functions, in
+which a change in these functions to a method in a class seemed like a waste of time.)
 mouse_to_tile(pos, tile_width, tile_height) - returns mouse location
 save_world(world, filename) - saves world
 load_world(world, i_store, filename) - loads a new world
@@ -48,16 +54,18 @@ handle_mouse_motion(view, event) - follows the mouse
 handle_keydown(view, event, i_store, world, entity_select) - handles mouse click
 create_new_entity(pt, entity_select, i_store) - creates new entity at location
 is_background_tile(entity_select) - determines if background tile
-handle_mouse_button(view, world, event, entity_select, i_store) - moves background
-activity_loop(view, world, i_store) - determines if input will affect will change
+handle_mouse_button(view, world, event, entity_select, i_store) - moves
+background
+activity_loop(view, world, i_store) - determines if input will affect will
+change
 
-builder.py (Same reason as builder_controller, there are too many outside function calls
-to make a change worthwhile.)
+builder.py (Same reason as builder_controller, there are too many outside
+function calls to make a change worthwhile.)
 create_default_background(img) - returns default image
 main() - runs program to set up background image
 
-controller.py (This function mostly deals with the interaction with the user, so there was
-no reason to put the functions into methods) 
+controller.py (This function mostly deals with the interaction with the user,
+so there was no reason to put the functions into methods) 
 on_keydown(event) - changes x_delta, y_delta
 mouse_to_tile(pos, tile_width, tile_height) - returns point mouse in on
 handle_timer_event(world, view) - update entity to timed event
@@ -65,12 +73,13 @@ handle_mouse_motion(view, event) - uses mouse to move screen
 handle_keydown(view, event) - update view on keydown
 activity_loop(view, world) - determines type of event previously specified
 
-entities.py (I put the functions into the according methods based on their parameters. I
-moved the sign and adjacent functions from actions.py due to its lack of use in that
-file.  I also kept the get_image outside the classes as there was a function call 
-elsewhere - I forget at the moment - where the object called as a parameter may not
-have been a class, so I kept it outside to avoid crashing the game.  I also kept 
-entitystring  becuase of a lack of time to figure out a better method.)
+entities.py (I put the functions into the according methods based on their
+parameters. I moved the sign and adjacent functions from actions.py due to its
+lack of use in that file.  I also kept the get_image outside the classes as
+there was a function call elsewhere - I forget at the moment - where the
+object called as a parameter may not have been a class, so I kept it outside
+to avoid crashing the game.  I also kept entitystring  becuase of a lack of
+time to figure out a better method.)
 Background(name, imgs)
      get_images(self)
      get_image(self)
@@ -94,6 +103,7 @@ MinerNotFull(self, name, resource_limit, position, rate, imgs, animation_rate)
      get_pending_actions(self)
      clear_pending_actions(self)
      next_image(self)
+     _schedule(self, world, ticks, i_store)
      miner_to_ore(world, entity, ore) - only an action non-full miners take
 
 MinerFull(self, name, resource_limit, position, rate, imgs, animation_rate)
@@ -113,6 +123,7 @@ MinerFull(self, name, resource_limit, position, rate, imgs, animation_rate)
      get_pending_actions(self)
      clear_pending_actions(self)
      next_image(self)
+     _schedule(self, world, ticks, i_store)
      miner_to_smith(self, world, smith) - only action full miners take
 
 Vein(self, name, rate, position, imgs, resource_distance=1)
@@ -129,8 +140,10 @@ Vein(self, name, rate, position, imgs, resource_distance=1)
      get_pending_actions(self)
      clear_pending_actions(self)
      next_image(self)
+     _create_ore(self, world, name, pt, ticks, i_store)
+     _schedule(self, world, ticks, i_store)
 
-OreBlob(self, name, position, imgs, rate=5000)
+Ore(self, name, position, imgs, rate=5000)
      set_position(self, point)
      get_position(self)
      get_images(self)
@@ -141,9 +154,10 @@ OreBlob(self, name, position, imgs, rate=5000)
      add_pending_action(self, action)
      get_pending_actions(self)
      clear_pending_actions(self)
-     next_image(self)
-     blob_to_vein(world, entity, vein) - decided to move this as it made sense when
-I transferred over the adjacent function to entities.py
+     next_image(self)     
+     _create_blob(self, world, name, pt, rate, ticks, i_store)
+     _schedule(self, world, ticks, i_store)
+     
 
 Blacksmith(self, name, position, imgs, resource_limit, rate, resource_distance=1)
      set_position(self, point)
@@ -184,6 +198,9 @@ OreBlob(self, name, position, rate, imgs, animation_rate)
      get_pending_actions(self)
      clear_pending_actions(self)
      next_image(self)
+     _create_quake(self, world, name, pt, ticks, i_store)
+     _schedule(self, world, ticks, i_store)
+     blob_to_vein(self, world, vein) - decided to move this as it made sense when I transferred over the adjacent function to entities.py
 
 Quake(self, name, position, imgs, animation_rate)
      set_position(self, point)
@@ -197,6 +214,8 @@ Quake(self, name, position, imgs, animation_rate)
      get_pending_actions(self)
      clear_pending_actions(self)
      next_image(self)
+     _schedule(world, ticks) 
+
 sign(x)
 adjacent(pt1, pt2) 
 get_image(entity)
@@ -276,10 +295,11 @@ WorldModel(num_rows, num_cols, background)
 nearest_entity(entity_dists)
 distance_sq(p1, p2)
 
-worldview.py (Similar reasons as above, I felt that even though some functions called
-upon themselves, I decided to keep the changes because the game worked.  I also kept
-clammp as a helper function.) 
-WorldView(view_cols, view_rows, screen, world, tile_width, tile_height, mouse_img=None)
+worldview.py (Similar reasons as above, I felt that even though some functions
+called upon themselves, I decided to keep the changes because the game
+worked.  I also kept clammp as a helper function.) 
+WorldView(view_cols, view_rows, screen, world, tile_width, tile_height,
+mouse_img=None)
    viewport_to_world(self, pt)
    world_to_viewport(self, pt)
    create_shifted_viewport(self, delta, num_rows, num_cols)
