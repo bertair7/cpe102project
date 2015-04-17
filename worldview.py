@@ -19,31 +19,39 @@ class WorldView:
       self.num_rows = world.num_rows
       self.num_cols = world.num_cols
       self.mouse_img = mouse_img
+
    def viewport_to_world(self, pt):
       return point.Point(pt.x + self.viewport.left, pt.y + self.viewport.top)
+
    def world_to_viewport(self, pt):
       return point.Point(pt.x - self.viewport.left, pt.y - self.viewport.top)
+
    def create_shifted_viewport(self, delta, num_rows, num_cols):
       new_x = clamp(self.viewport.left + delta[0], 0, num_cols 
          - self.viewport.width)
       new_y = clamp(self.viewport.top + delta[1], 0, num_rows
          - self.viewport.height)
-      return pygame.Rect(new_x, new_y, self.viewport.width, self.viewport.height)  
+      return pygame.Rect(new_x, new_y, self.viewport.width,
+         self.viewport.height)  
+
    def draw_background(self):
       for y in range(0, self.viewport.height):
          for x in range(0, self.viewport.width):
             w_pt = self.viewport_to_world(point.Point(x, y))
             img = self.world.get_background_image(w_pt)
             self.screen.blit(img, (x * self.tile_width, y * self.tile_height))
+
    def draw_entities(self):
       for entity in self.world.entities:
          if self.viewport.collidepoint(entity.position.x, entity.position.y):
             v_pt = self.world_to_viewport(entity.position)
             self.screen.blit(entity.get_image(),
                (v_pt.x * self.tile_width, v_pt.y * self.tile_height))
+
    def draw_viewport(self):
       self.draw_background()
       self.draw_entities()
+
    def update_view(self, view_delta=(0,0), mouse_img=None):
       self.viewport = self.create_shifted_viewport(view_delta,
          self.num_rows, self.num_cols)
@@ -51,6 +59,7 @@ class WorldView:
       self.draw_viewport()
       pygame.display.update()
       self.mouse_move(self.mouse_pt)
+
    def update_view_tiles(self, tiles):
       rects = []
       for tile in tiles:
@@ -61,11 +70,13 @@ class WorldView:
             if self.mouse_pt.x == v_pt.x and self.mouse_pt.y == v_pt.y:
                rects.append(self.update_mouse_cursor())
       pygame.display.update(rects)
+
    def update_tile(self, view_tile_pt, surface):
       abs_x = view_tile_pt.x * self.tile_width
       abs_y = view_tile_pt.y * self.tile_height
       self.screen.blit(surface, (abs_x, abs_y))
       return pygame.Rect(abs_x, abs_y, self.tile_width, self.tile_height)
+
    def get_tile_image(self, view_tile_pt):
       pt = self.viewport_to_world(view_tile_pt)
       bgnd = self.world.get_background_image(pt)
@@ -77,6 +88,7 @@ class WorldView:
          return img
       else:
          return bgnd
+
    def create_mouse_surface(self, occupied):
       surface = pygame.Surface((self.tile_width, self.tile_height))
       surface.set_alpha(MOUSE_HOVER_ALPHA)
@@ -88,10 +100,12 @@ class WorldView:
          surface.blit(self.mouse_img, (0, 0))
 
       return surface
+
    def update_mouse_cursor(self):
       return self.update_tile(self.mouse_pt,
          self.create_mouse_surface(self.world.is_occupied(
                self.viewport_to_world(self.mouse_pt))))
+
    def mouse_move(self, new_mouse_pt):
       rects = []
       rects.append(self.update_tile(self.mouse_pt,
