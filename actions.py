@@ -2,7 +2,6 @@ import entities
 import worldmodel
 import pygame
 import math
-import random
 import point
 import image_store
 
