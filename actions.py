@@ -195,7 +195,7 @@ def create_ore_transform_action(world, entity, i_store):
       return [blob.get_position()]
    return action
 
-
+ 
 def remove_entity(world, entity):
    for action in entity.get_pending_actions():
       world.unschedule_action(action)

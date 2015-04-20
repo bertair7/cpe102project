@@ -79,7 +79,7 @@ class Moving(NonBackground):
 
    def get_rate(self):
       return self.rate
-
+ 
 
 class Miner(Moving):
    def __init__(self, name, resource_limit, position, rate, imgs, 
