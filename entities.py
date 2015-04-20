@@ -132,10 +132,10 @@ class MinerNotFull(Miner):
          return (world.move_entity(self, new_pt), False)
 
 
-class MinerFull:
+class MinerFull(Miner):
    def __init__(self, name, resource_limit, position, rate, imgs,
       animation_rate):
-      super(MinerNotFull, self).__init__(name, resource_limit, position, rate, 
+      super(MinerFull, self).__init__(name, resource_limit, position, rate, 
          imgs, animation_rate)
       self.resource_count = resource_limit
 
@@ -156,7 +156,7 @@ class MinerFull:
 
 class Vein(Moving):
    def __init__(self, name, rate, position, imgs, resource_distance=1):
-      super(Vein, self).__init__(name, rate, position, imgs)
+      super(Vein, self).__init__(name, position, rate, imgs)
       self.resource_distance = resource_distance
 
    def get_resource_distance(self):
@@ -191,7 +191,8 @@ class Ore(NonBackground):
 
    def _schedule(self, world, ticks, i_store):
       actions.schedule_action(world, self,
-         actions.create_ore_transform_action(world, self, i_store),
+         actions.create_ore_transform_acti
+on(world, self, i_store),
          ticks + self.get_rate())
 
 
@@ -221,8 +222,8 @@ class Blacksmith(NonBackground):
 
 
 class Obstacle(InGrid):
-   def __init__(self, name, position, imgs):
-      super(Obstacle, self).__init__(name, position, imgs)
+   pass
+
 
 
 class OreBlob(Moving):
@@ -272,7 +273,8 @@ class Quake(NonBackground):
    def _schedule(self, world, ticks):
       actions.schedule_animation(world, self, actions.QUAKE_STEPS) 
       actions.schedule_action(world, self, 
-         actions.create_entity_death_action(world, self), ticks + 
+         actions.create_entity_death_actio
+n(world, self), ticks + 
          actions.QUAKE_DURATION)
 
 
@@ -291,7 +293,8 @@ def adjacent(pt1, pt2):
 def get_image(entity):
    return entity.imgs[entity.current_img]
 
-# This is a less than pleasant file format, but structured based on
+# This is a less than pleasant file format
+, but structured based on
 # material covered in course.  Something like JSON would be a
 # significant improvement.
 def entity_string(entity):
