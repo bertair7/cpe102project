@@ -43,9 +43,11 @@ remove_entity(world, entity) - removes entity and unschedules events
 schedule_action(world, entity, action, time) - schedules action 
 clear_pending_action(world, entity) - unschedule an event
 
+
 builder_controller.py (I kept the same functionality in this file mainly due
 to the fact that 4 different files are called in some of the functions, in
 which a change in these functions to a method in a class seemed like a waste of time.)
+
 mouse_to_tile(pos, tile_width, tile_height) - returns mouse location
 save_world(world, filename) - saves world
 load_world(world, i_store, filename) - loads a new world
@@ -59,19 +61,24 @@ background
 activity_loop(view, world, i_store) - determines if input will affect will
 change
 
+
 builder.py (Same reason as builder_controller, there are too many outside
 function calls to make a change worthwhile.)
+
 create_default_background(img) - returns default image
 main() - runs program to set up background image
 
+
 controller.py (This function mostly deals with the interaction with the user,
 so there was no reason to put the functions into methods) 
+
 on_keydown(event) - changes x_delta, y_delta
 mouse_to_tile(pos, tile_width, tile_height) - returns point mouse in on
 handle_timer_event(world, view) - update entity to timed event
 handle_mouse_motion(view, event) - uses mouse to move screen
 handle_keydown(view, event) - update view on keydown
 activity_loop(view, world) - determines type of event previously specified
+
 
 entities.py (I put the functions into the according methods based on their
 parameters. I moved the sign and adjacent functions from actions.py due to its
@@ -80,140 +87,73 @@ there was a function call elsewhere - I forget at the moment - where the
 object called as a parameter may not have been a class, so I kept it outside
 to avoid crashing the game.  I also kept entitystring  becuase of a lack of
 time to figure out a better method.)
-Background(name, imgs)
-     get_images(self)
-     get_image(self)
-     get_name(self)
-     next_image(self)
 
-MinerNotFull(self, name, resource_limit, position, rate, imgs, animation_rate)
-     next_position(self, world, dest_pt)
-     set_position(self, point)
-     get_position(self)
+Entity(name, imgs)
      get_images(self)
      get_image(self)
-     get_rate(self)
-     set_resource_count(self, n)
-     get_resource_count(self)
-     get_resource_limit(self)
      get_name(self)
-     get_animation_rate(self)
+
+InGrid(self, name, position, imgs) - Entity
+     set_position(self, pt)
+     get_position(self)
+
+NonBackground(self, name, position, imgs) - InGrid
      remove_pending_action(self, action)
      add_pending_action(self, action)
      get_pending_actions(self)
      clear_pending_actions(self)
      next_image(self)
-     _schedule(self, world, ticks, i_store)
+
+Moving(self, name, position, rate, imgs) - NonBackground
+     next_position(self, world, dest_pt)
+     get_rate(self)
+
+Miner(self, name, resource_limit, position, rate, imgs, animation_rate) - Moving
+     set_resource_count(self, n)
+     get_resource_count(self)
+     get_resource_limit(self)
+     _schedule(self, world, ticks, i_store)              
+
+Background(name, imgs) - Entity
+     next_image(self)
+
+MinerNotFull(self, name, resource_limit, position, rate, imgs, animation_rate) 
+- Miner
      miner_to_ore(world, entity, ore) - only an action non-full miners take
 
 MinerFull(self, name, resource_limit, position, rate, imgs, animation_rate)
-     next_position(self, world, dest_pt)
-     set_position(self, point)
-     get_position(self)
-     get_images(self)
-     get_image(self)
-     get_rate(self)
-     set_resource_count(self, n)
-     get_resource_count(self)
-     get_resource_limit(self)
-     get_name(self)
-     get_animation_rate(self)
-     remove_pending_action(self, action)
-     add_pending_action(self, action)
-     get_pending_actions(self)
-     clear_pending_actions(self)
-     next_image(self)
-     _schedule(self, world, ticks, i_store)
+- Miner
      miner_to_smith(self, world, smith) - only action full miners take
 
-Vein(self, name, rate, position, imgs, resource_distance=1)
-     next_position(self, world, dest_pt)
-     set_position(self, point)
-     get_position(self)
-     get_images(self)
-     get_image(self)
-     get_rate(self)
+Vein(self, name, rate, position, imgs, resource_distance=1) - Moving
      get_resource_distance(self)
-     get_name(self)
-     remove_pending_action(self, action)
-     add_pending_action(self, action)
-     get_pending_actions(self)
-     clear_pending_actions(self)
-     next_image(self)
      _create_ore(self, world, name, pt, ticks, i_store)
      _schedule(self, world, ticks, i_store)
 
-Ore(self, name, position, imgs, rate=5000)
-     set_position(self, point)
-     get_position(self)
-     get_images(self)
-     get_image(self)
+Ore(self, name, position, imgs, rate=5000) - NonBackground
      get_rate(self)
-     get_name(self)
-     remove_pending_action(self, action)
-     add_pending_action(self, action)
-     get_pending_actions(self)
-     clear_pending_actions(self)
-     next_image(self)     
      _create_blob(self, world, name, pt, rate, ticks, i_store)
      _schedule(self, world, ticks, i_store)
      
 
 Blacksmith(self, name, position, imgs, resource_limit, rate, resource_distance=1)
-     set_position(self, point)
-     get_position(self)
-     get_images(self)
-     get_image(self)
+- NonBackground
      get_rate(self)
      set_resource_count(self, n)
      get_resource_count(self)
      get_resource_limit(self)
      get_resource_distance(self)
-     get_name(self)
-     remove_pending_action(self, action)
-     add_pending_action(self, action)
-     get_pending_actions(self)
-     clear_pending_actions(self)
-     next_image(self)
 
-Obstacle(self, name, position, imgs)
-     set_position(self, point)
-     get_position(self)
-     get_images(self)
-     get_image(self)
-     get_name(self)
+Obstacle(self, name, position, imgs) - InGrid
 
-OreBlob(self, name, position, rate, imgs, animation_rate)
-     next_position(self, world, dest_pt)
-     set_position(self, point)
-     get_position(self)
-     get_images(self)
-     get_image(self)
-     get_rate(self)
-     get_resource_distance(self)
-     get_name(self)
+OreBlob(self, name, position, rate, imgs, animation_rate) - Moving
      get_animation_rate(self)
-     remove_pending_action(self, action)
-     add_pending_action(self, action)
-     get_pending_actions(self)
-     clear_pending_actions(self)
-     next_image(self)
      _create_quake(self, world, name, pt, ticks, i_store)
      _schedule(self, world, ticks, i_store)
      blob_to_vein(self, world, vein) - decided to move this as it made sense when I transferred over the adjacent function to entities.py
 
-Quake(self, name, position, imgs, animation_rate)
-     set_position(self, point)
-     get_position(self)
-     get_images(self)
-     get_image(self)
-     get_name(self)
+Quake(self, name, position, imgs, animation_rate) - NonBackground
      get_animation_rate(self)
-     remove_pending_action(self, action) 
-     add_pending_action(self, action)
-     get_pending_actions(self)
-     clear_pending_actions(self)
-     next_image(self)
      _schedule(world, ticks) 
 
 sign(x)
@@ -221,29 +161,37 @@ adjacent(pt1, pt2)
 get_image(entity)
 entity_string(entity) 
 
+
 image_store.py (Deals with images outside in the file, which did not appear
 to need a class associated with it)
+
 create_default_image(tile_width, tile_height) - creates default background
 load_images(filename, tile_width, tile_height) - load images of each tile
 process_image_line(images, line) - gets image for each object in line
 get_images_internal(images, key)
 get_images(images, key)
 
+
 main.py (I don't liek programming classes inside my main.py file; just
 a personal preference.)
+
 create_default_background(img)
 load_world(world, i_store, filename)
 main()
 
+
 occ_grid.py (I changed the two functions into methods inside Grid because
 it was simple enough to code.  They work well when inside the class.)
+
 Grid(width, height, occupance_value)
      set_cell(self, point, value)
      get_cell(self, point)
 
+
 ordered_list.py (The functions were already methods inside the class, so 
 no changes were necessary.)
-OrderedList)
+
+OrderedList
      insert(item, ord)
      remove(item)
      head()
@@ -257,6 +205,7 @@ Point(x, y)
 save_load.py (I debated using a class to organize the function calls for the
 objects, but it was already assorted inside worldmodel, so I decided against
 it.)
+
 save_world(world, file)
 save_entities(world, file)
 save_background(world, file)
@@ -271,11 +220,13 @@ create_blacksmith(properties, i_store)
 create_obstacle(properties, i_store)
 schedule_entity(world, entity, i_store)
 
+
 worldmodel.py (Although some of the functions here call upon other methods
 in the class, I felt that it would not be worth it to change it back after
 I had already changed everything.  I kept distance_sq and nearest_entity 
 as helper functions as it doesn't serve a specific purpose inside 
 WorldModel.)
+
 WorldModel(num_rows, num_cols, background)
      within_bounds(self, pt)
      is_occupied(self, pt)
@@ -292,25 +243,29 @@ WorldModel(num_rows, num_cols, background)
      schedule_action(self, action, time)
      unschedule_action(self, action)
      update_on_time(self, ticks)
+
 nearest_entity(entity_dists)
 distance_sq(p1, p2)
+
 
 worldview.py (Similar reasons as above, I felt that even though some functions
 called upon themselves, I decided to keep the changes because the game
 worked.  I also kept clammp as a helper function.) 
+
 WorldView(view_cols, view_rows, screen, world, tile_width, tile_height,
 mouse_img=None)
-   viewport_to_world(self, pt)
-   world_to_viewport(self, pt)
-   create_shifted_viewport(self, delta, num_rows, num_cols)
-   draw_background(self)
-   draw_entities(self)
-   draw_viewport(self)
-   update_view(self, view_delta=(0,0), mouse_img=None)
-   update_view_tiles(self, tiles)
-   update_tile(self, view_tile_pt, surface)
-   get_tile_image(self, view_tile_pt)
-   create_mouse_surface(self, occupied)
-   update_mouse_cursor(self)
-   mouse_move(self, new_mouse_pt)
+     viewport_to_world(self, pt)
+     world_to_viewport(self, pt)
+     create_shifted_viewport(self, delta, num_rows, num_cols)
+     draw_background(self)
+     draw_entities(self)
+     draw_viewport(self)
+     update_view(self, view_delta=(0,0), mouse_img=None)
+     update_view_tiles(self, tiles)
+     update_tile(self, view_tile_pt, surface)
+     get_tile_image(self, view_tile_pt)
+     create_mouse_surface(self, occupied)
+     update_mouse_cursor(self)
+     mouse_move(self, new_mouse_pt)
+
 clamp(v, low, high)
